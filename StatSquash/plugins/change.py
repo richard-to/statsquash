@@ -20,7 +20,7 @@ class Change:
             path, filename = os.path.split(location)
             label, ext = os.path.splitext(filename)
             
-            if self.find_prefix in label:
+            if label.startswith(self.find_prefix):
                 new_label = label.replace(self.find_prefix, self.replace_prefix)
                 labels.append((label, new_label))             
         else:
@@ -29,7 +29,7 @@ class Change:
                     script = os.path.join(dirname, filename)
                     label, ext = os.path.splitext(filename)
 
-                    if self.find_prefix in label:
+                    if label.startswith(self.find_prefix):
                         new_label = label.replace(self.find_prefix, self.replace_prefix)
                         labels.append((label, new_label))  
         

@@ -1,0 +1,6 @@
+queries/
+config.py
+recipes.py
+*.pyc
+.project
+.pydevproject

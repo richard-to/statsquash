@@ -1,4 +1,4 @@
-queries/
+/queries/
 config.py
 recipes.py
 *.pyc

@@ -3,6 +3,13 @@ from StatSquash.plugins.change import Change
 
 dev = False
 
+extract_db = {
+    'host':'',
+    'user': '',
+    'passwd': '',
+    'db': ''
+}
+
 load_db = {
     'host':'',
     'user': '',
@@ -15,8 +22,8 @@ tables = {
 }
 
 data_dir = {
-    'total': '/path/queries/total',
-    'avg': '/path/queries/avg'
+    'total': '/path/examples/queries/total',
+    'avg': '/path/examples/queries/avg'
 }
 
 harvester = {

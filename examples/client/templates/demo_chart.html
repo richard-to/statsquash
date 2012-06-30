@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+	<head>
+    	<meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    	<title>Client Example with Flask and Google Charts</title>
+    	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+    	<script src="http://www.google.com/jsapi"></script>
+    	<script>
+      		google.load('visualization', '1', {packages: ['corechart']});
+    	</script>
+    	<script>
+	      	function initGraphs() {
+	      		
+	      		var draw = function(opts){
+		      	 	opts.graph.draw(opts.dataTable, {curveType: "function",
+		                	backgroundColor: {	
+		                		fill:'#fdfdfd',
+		                		stroke:'#5d727b',
+		                		strokeWidth:1
+		                	},
+		                	titleTextStyle: {color:'#5d727b'},
+		                	hAxis: {
+		                		gridlines: {
+		                			color: '#000000'
+		                		}	
+		                	},
+		                	height:300,
+		                	colors: ['#4f6671', '#2f368f', '#2cabe1'], 
+		                  	title: opts.title                  
+		                  	}
+		          		);     			
+	      		}
+	      		
+				var containerSelector = '#graphs_container'
+
+				var graphMeta = [
+				{% for opts in graphs %}
+					{
+						'title': '{{ opts['title'] }}',
+						'type': '{{ opts['type'] }}',
+						'data': {{ opts['data']|safe }}
+					},
+				{% endfor %}
+				]
+				
+				$.each(graphMeta, function(idx, opts){
+					var graphWrap = $('<div></div>');
+					var graphId = 'graph' + idx;	
+					graphWrap.attr('id', graphId).attr('class', 'graph_wrap');					
+					$(containerSelector).append(graphWrap);
+					opts.dataTable = google.visualization.arrayToDataTable(opts.data);      
+					opts.graph = new google.visualization.LineChart(document.getElementById(graphId));
+					draw(opts);
+				});
+
+				$(window).resize(function() {
+					$.each(graphMeta, function(idx, opts){
+						draw(opts);
+					});
+				});        	
+	      	}
+	      	google.setOnLoadCallback(initGraphs);
+    	</script>
+  	</head>
+  	<body>
+		<div id="graphs_container"></div>		
+  	</body>
+</html>

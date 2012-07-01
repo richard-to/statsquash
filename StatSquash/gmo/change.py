@@ -1,30 +1,28 @@
-import os
 import os.path
-from datetime import date, datetime, timedelta
 from dateutil.relativedelta import relativedelta
-import MySQLdb
-from StatSquash.helper import query_value, get_result, fetch_one
+from StatSquash.helper import query_value, get_result
 
 class Change:
     
-    def __init__(self, db_params, tables, find_prefix='total_', replace_prefix='change_'):
+    def __init__(self, db_params, tables, location, find_prefix='ttl_', replace_prefix='chg_'):
         self.db_params = db_params
         self.tables = tables
+        self.location = location
         self.find_prefix = find_prefix
         self.replace_prefix = replace_prefix
         
-    def run(self, loader, location, start_date, end_date, interval):
+    def farm(self, loader, start_date, end_date, interval):
         
         labels = []
-        if os.path.isfile(location):
-            path, filename = os.path.split(location)
+        if os.path.isfile(self.location):
+            path, filename = os.path.split(self.location)
             label, ext = os.path.splitext(filename)
             
             if label.startswith(self.find_prefix):
                 new_label = label.replace(self.find_prefix, self.replace_prefix)
                 labels.append((label, new_label))             
         else:
-            for dirname, dirnames, filenames in os.walk(location):
+            for dirname, dirnames, filenames in os.walk(self.location):
                 for filename in filenames:
                     script = os.path.join(dirname, filename)
                     label, ext = os.path.splitext(filename)

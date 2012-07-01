@@ -13,9 +13,10 @@ def sub_month_date(str_date, sub_months=1):
     
 def parse_args():
     args = {}
-    if len(sys.argv) == 3:
-        args['date'] = sys.argv[1]
-        args['interval'] = sys.argv[2]
+    if len(sys.argv) == 4:
+        args['start_date'] = sys.argv[1]        
+        args['end_date'] = sys.argv[2]
+        args['interval'] = sys.argv[3]
     else:
         sys.exit()
     return args
@@ -28,7 +29,7 @@ def query_value(table, label, cur_date):
 def get_result(db_params, query):
     data = fetch_one(db_params, query)
     result = 0
-    if data != None:
+    if data != None and data[0] != None:
         result = data[0]
     return result  
 
@@ -36,7 +37,7 @@ def get_avg(db_params, queryNum, queryDenom):
     num = fetch_one(db_params, queryNum)
     denom = fetch_one(db_params, queryDenom)
     avg = 0
-    if(denom[0] != 0):
+    if num != None and denom != None and denom[0] != 0:
         avg = num[0]/denom[0]    
     return avg   
 
@@ -55,4 +56,8 @@ def fetch_one(db_params, query):
     data = cursor.fetchone()
     cursor.close()
     conn.close()
+    
+    if data != None:
+        data = [0 if val is None else val for val in data]
+        
     return data

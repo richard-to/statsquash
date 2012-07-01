@@ -4,3 +4,4 @@ recipes.py
 *.pyc
 .project
 .pydevproject
+gmo_config.py

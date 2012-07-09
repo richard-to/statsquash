@@ -19,11 +19,11 @@ class Pct:
             cur_date = start_date
             while cur_date <= end_date:
                 new_label = "".join([self.new_prefix, num_label])
-                queryNum = query_value(table, num_label, cur_date - relativedelta(months=1))   
+                queryNum = query_value(table, num_label, cur_date)   
                 queryDenom =query_value(table, denom_label, cur_date)
                 pct = get_pct(self.db_params, queryNum, queryDenom)   
                 data.append((new_label, pct, cur_date))
                 cur_date = cur_date + relativedelta(months=1) 
-     
+
         if len(data) > 0:
             loader.load(data)

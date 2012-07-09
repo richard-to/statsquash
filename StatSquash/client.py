@@ -1,3 +1,4 @@
+from datetime import datetime
 import MySQLdb
 
 class GrapherChef:
@@ -28,7 +29,7 @@ class MySqlHarvester:
                 
     def harvest(self, label):
         
-        query = ("select date_format(created_at, '%%b %%Y'), label, value from %s "
+        query = ("select created_at, label, value from %s "
         "where label = '%s' order by created_at asc"
         "") % (self.table, label)
         
@@ -45,19 +46,21 @@ class MySqlHarvester:
 class GoogleChartStyle:
     
     def prepare(self, title, type, headers, point_set):
-        data_array = "".join(['[', self.prepare_header(headers), self.prepare_points(point_set), ']'])
+        data_array = "".join(['[', self.prepare_header(headers), self.prepare_points(point_set, type), ']'])
         return {'title':title, 'type':type, 'data':data_array}
     
     def prepare_header(self, headers):
         return "".join(['[' ,", ".join("'%s'" % header for header in headers), '],'])
     
-    def prepare_points(self, point_set):
+    def prepare_points(self, point_set, type):
         cols = len(point_set)
         rows = []
         for i in range(len(point_set[0])):
-            row = ["".join(["'",point_set[0][i][0],"'"])]
+            row = [self.prepare_date(point_set[0][i][0], type)]
             row.extend([point_set[col][i][2] for col in range(cols)])
             rows.append(row)
         template = "".join(["[", ",".join("%s" for col in range(cols+1)), "]"])
         return ",".join(template % tuple(row) for row in rows)
- 
+    
+    def prepare_date(self, date, type):
+        return date.strftime("'%m/%y'")    

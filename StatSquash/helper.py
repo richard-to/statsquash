@@ -45,6 +45,7 @@ def get_pct(db_params, queryNum, queryDenom):
     num = fetch_one(db_params, queryNum)
     denom = fetch_one(db_params, queryDenom)
     pct = 0
+
     if num != None and denom != None and denom[0] != 0:
         pct = math.ceil(((float(num[0])/float(denom[0]))*100))  
     return pct
@@ -56,7 +57,7 @@ def fetch_one(db_params, query):
     data = cursor.fetchone()
     cursor.close()
     conn.close()
-    
+
     if data != None:
         data = [0 if val is None else val for val in data]
         
